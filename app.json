@@ -17,16 +17,33 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jamescharlesworth.podapp"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.jamescharlesworth.podapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "firebase": {
+        "apiKey": "AIzaSyDJJojjVUiBjSBTTySffGkf3-36VB2Dxm8",
+        "authDomain": "j5s-dev.firebaseapp.com",
+        "projectId": "j5s-dev",
+        "storageBucket": "j5s-dev.appspot.com"
+      },
+      "facebook": {
+        "appId": "496044444375982",
+        "appName": "PodDev"
+      },
+      "storage": {
+        "bucketName": "pod-audio-clips-stage"
+      }
     }
   }
 }

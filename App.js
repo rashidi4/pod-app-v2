@@ -1,21 +1,43 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import styled from 'styled-components/native';
+import {ApolloProvider} from '@apollo/client';
+import { createClient } from './app/util/client';
+import AppMain from './app/index';
+import variables from './app/components/styles/variables';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+export default class App extends Component {
+  state = {
+    client: null,
+    loaded: false
+  };
+
+  async componentDidMount() {
+    const client = await createClient();
+    this.setState({
+      client,
+      loaded: true,
+    });
+  }
+  render() {
+    const { client, loaded } = this.state;
+
+    if (!loaded) {
+      return <LoadingText>Loading</LoadingText>
+    }
+    return (
+      <ApolloProvider client={client}>
+        <StatusBar
+          backgroundColor={variables.BACKGROUND_BG}
+          barStyle="dark-content"
+          translucent={true}
+        />
+        <AppMain />
+      </ApolloProvider>
+    );
+  }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
+const LoadingText = styled.Text`
+`;
