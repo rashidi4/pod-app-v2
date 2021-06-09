@@ -5,7 +5,7 @@ import firebase from './firebase';
 (async () => {
   const { appId } = Constants.manifest.extra.facebook;
   try {
-    await Facebook.initializeAsync(appId);
+    await Facebook.initializeAsync({ appId });
   } catch(e) {
     console.log(e);
   }

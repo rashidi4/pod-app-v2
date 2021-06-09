@@ -55,7 +55,7 @@ export async function createClient() {
 
 
 
-  
+
   // cache.writeData({
   //   data: {
   //     downloads: [],
@@ -82,7 +82,7 @@ export async function createClient() {
 // client.onResetStore(() => cache.writeData({data}));
 
   const httpLink = new HttpLink({
-    uri: 'http://localhost:4000'//'https://pod-audio-dev-jc.appspot.com',//https://graphql-727haw3lrq-ue.a.run.app'//,
+    uri: 'http://localhost:4000'//'https://pod-audio-dev-jc.appspot.com',
     // headers: {
     //   authorization: localStorage.getItem('token'),
     //   'client-name': 'Space Explorer [web]',
