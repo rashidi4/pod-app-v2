@@ -7,23 +7,32 @@ import Tab from './Tab';
 import variables from '../../styles/variables';
 
 const TabBar = (props) => {
-  const { navigation, borderTop } = props;
-  const position = new Animated.Value(navigation.state.index);
+  const { state, descriptors, navigation, borderTop } = props;
+  
   return (
     <Wrapper borderTop={borderTop}>
-      {navigation.state.routes.map((route, index) => {
-        const focusAnim = position.interpolate({
-          inputRange: [index - 1, index, index + 1],
-          outputRange: [0, 1, 0]
-        });
+      {state.routes.map((route, index) => {
+        const { options } = descriptors[route.key];
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+            canPreventDefault: true,
+          });
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name);
+          }
+        };
 
         return (
           <Tab
-            key={index}
-            focusAnim={focusAnim}
+            key={route.key}
             route={route}
-            active={index === navigation.state.index}
-            onPress={() => navigation.navigate(route.routeName)}
+            active={isFocused}
+            onPress={onPress}
           />
         )
       })}
@@ -34,12 +43,11 @@ const TabBar = (props) => {
 export default TabBar;
 
 TabBar.propTypes = {
+  state: shape({}),
+  descriptors: shape({}),
   navigation: shape({
     navigate: func,
-  }),
-  navigationState: shape({}),
-  position: shape({
-    interpolate: func
+    emit: func,
   }),
   borderTop: bool,
 };

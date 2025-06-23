@@ -6,7 +6,7 @@ import Podcast from './Podcast/Podcast.component';
 import Playing from './Playing/Playing.component';
 import Clips from './Clips/Clips.component';
 import Tags from './Tags/Tags.component';
-import {createBottomTabNavigator} from 'react-navigation-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import variables from '../components/styles/variables';
 import CurrentlyPlaying from '../components/CurrentlyPlaying/CurrentlyPlaying.component';
 
@@ -20,31 +20,26 @@ export {
   Tags
 };
 
+const Tab = createBottomTabNavigator();
 
-// const TabBarComponent = props => <BottomTabBar {...props} />;
-const AppNavigator = createBottomTabNavigator({
-  Home: {
-    screen: Home,
-  },
-  Search: {
-    screen: Search,
-  },
-  Clips: {
-    screen: Clips,
-  },
-  Downloads: {
-    screen: Downloads,
-  },
-  Profile: {
-    screen: Profile,
-  }
-}, {
-  initialRouteName: 'Home',
-  tabBarOptions: {
-    showIcon: true,
-    showLabel: false,
-    activeTintColor: variables.ACTIVE_COLOR,
-  },
-  tabBarComponent: CurrentlyPlaying,
-});
+const AppNavigator = () => {
+  return (
+    <Tab.Navigator
+      initialRouteName="Home"
+      tabBar={(props) => <CurrentlyPlaying {...props} />}
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarActiveTintColor: variables.ACTIVE_COLOR,
+      }}
+    >
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Search" component={Search} />
+      <Tab.Screen name="Clips" component={Clips} />
+      <Tab.Screen name="Downloads" component={Downloads} />
+      <Tab.Screen name="Profile" component={Profile} />
+    </Tab.Navigator>
+  );
+};
+
 export default AppNavigator;
