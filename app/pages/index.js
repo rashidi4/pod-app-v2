@@ -27,6 +27,7 @@ const AppNavigator = () => {
     <Tab.Navigator
       initialRouteName="Home"
       tabBar={(props) => <CurrentlyPlaying {...props} />}
+      }
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
