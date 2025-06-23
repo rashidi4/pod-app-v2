@@ -1,25 +1,34 @@
-import * as Facebook from 'expo-facebook';
-import Constants from 'expo-constants';
-import firebase from './firebase';
+import { Platform } from 'react-native';
 
-(async () => {
-  const { appId } = Constants.manifest.extra.facebook;
+let Facebook = null;
+
+// Only use Facebook SDK on native platforms
+if (Platform.OS !== 'web') {
   try {
-    await Facebook.initializeAsync({ appId });
-  } catch(e) {
-    console.log(e);
+    Facebook = require('expo-facebook');
+    const Constants = require('expo-constants');
+    
+    if (Constants.manifest?.extra?.facebook?.appId) {
+      Facebook.initializeAsync({ 
+        appId: Constants.manifest.extra.facebook.appId 
+      });
+    }
+  } catch (error) {
+    console.warn('Facebook SDK initialization failed:', error);
   }
-})();
+}
 
 export const authenticateWithFacebook = async () => {
+  if (Platform.OS === 'web') {
+    throw new Error('Facebook authentication not available on web');
+  }
+  
+  if (!Facebook) {
+    throw new Error('Facebook SDK not initialized');
+  }
+  
   try {
-    const {
-      // type,
-      token,
-      // expires,
-      // permissions,
-      // declinedPermissions,
-    } = await Facebook.logInWithReadPermissionsAsync({
+    const { token } = await Facebook.logInWithReadPermissionsAsync({
       permissions: ['public_profile', 'email']
     });
     return token;
@@ -30,6 +39,11 @@ export const authenticateWithFacebook = async () => {
 };
 
 export const loginWithFacebookToken = async (token) => {
+  if (Platform.OS === 'web') {
+    throw new Error('Facebook login not available on web');
+  }
+  
+  const firebase = require('./firebase').default;
   await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
   const credential = firebase.auth.FacebookAuthProvider.credential(token);
   return await firebase.auth().signInWithCredential(credential);
